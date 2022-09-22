@@ -3,8 +3,9 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { Col, Row } from "react-bootstrap";
 import DepartureBoard from '../public/js/departure-board';
+import axios from "axios";
 
-export default function Home() {
+export default function Home({ apiBase, teams, events }) {
   const tvScreenDisplayRef = useRef();
   const tvScreenContentRef = useRef();
   const gaugeBoardTeam1Ref = useRef();
@@ -13,6 +14,8 @@ export default function Home() {
   const gaugeBoardTeam4Ref = useRef();
 
   const [gaugeBoardTeams, setGaugeBoardTeams] = useState({});
+  const [currentTeams, setCurrentTeams] = useState(teams);
+  const [currentEvents, setCurrentEvents] = useState(events);
 
   const scrollDown = (isFirst = false) => {
     let timeoutIdScrollTop;
@@ -70,6 +73,31 @@ export default function Home() {
     });
   }, []);
 
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      const { data: teams } = await axios.get(`${apiBase}/teams`);
+      const { data: events } = await axios.get(`${apiBase}/events`);
+      setCurrentTeams(teams);
+      setCurrentEvents(events);
+    }, 30000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    if (gaugeBoardTeams?.teamBoard1 && currentTeams?.[0]) {
+      gaugeBoardTeams.teamBoard1.setValue(currentTeams[0].score.toString());
+    }
+    if (gaugeBoardTeams?.teamBoard2 && currentTeams?.[1]) {
+      gaugeBoardTeams.teamBoard2.setValue(currentTeams[1].score.toString());
+    }
+    if (gaugeBoardTeams?.teamBoard3 && currentTeams?.[2]) {
+      gaugeBoardTeams.teamBoard3.setValue(currentTeams[2].score.toString());
+    }
+    if (gaugeBoardTeams?.teamBoard4 && currentTeams?.[3]) {
+      gaugeBoardTeams.teamBoard4.setValue(currentTeams[3].score.toString());
+    }
+  }, [gaugeBoardTeams, currentTeams]);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -103,32 +131,11 @@ export default function Home() {
                     <div className="mb-3">
                       <u className="fs-4">25 Derniers evenements:</u>
                     </div>
-                    <div className="mb-2">- Nom Team: +50 pour "Nettoient la salle cousteau"</div>
-                    <div className="mb-2">- Nom Team: +1200 pour "Premier Rush 1"</div>
-                    <div className="mb-2">- Nom Team: +50 pour "Nettoient la salle cousteau"</div>
-                    <div className="mb-2">- Nom Team: +1200 pour "Premier Rush 1"</div>
-                    <div className="mb-2">- Nom Team: +50 pour "Nettoient la salle cousteau"</div>
-                    <div className="mb-2">- Nom Team: +1200 pour "Premier Rush 1"</div>
-                    <div className="mb-2">- Nom Team: +50 pour "Nettoient la salle cousteau"</div>
-                    <div className="mb-2">- Nom Team: +1200 pour "Premier Rush 1"</div>
-                    <div className="mb-2">- Nom Team: +50 pour "Nettoient la salle cousteau"</div>
-                    <div className="mb-2">- Nom Team: +1200 pour "Premier Rush 1"</div>
-                    <div className="mb-2">- Nom Team: +50 pour "Nettoient la salle cousteau"</div>
-                    <div className="mb-2">- Nom Team: +1200 pour "Premier Rush 1"</div>
-                    <div className="mb-2">- Nom Team: +50 pour "Nettoient la salle cousteau"</div>
-                    <div className="mb-2">- Nom Team: +1200 pour "Premier Rush 1"</div>
-                    <div className="mb-2">- Nom Team: +50 pour "Nettoient la salle cousteau"</div>
-                    <div className="mb-2">- Nom Team: +1200 pour "Premier Rush 1"</div>
-                    <div className="mb-2">- Nom Team: +50 pour "Nettoient la salle cousteau"</div>
-                    <div className="mb-2">- Nom Team: +1200 pour "Premier Rush 1"</div>
-                    <div className="mb-2">- Nom Team: +50 pour "Nettoient la salle cousteau"</div>
-                    <div className="mb-2">- Nom Team: +1200 pour "Premier Rush 1"</div>
-                    <div className="mb-2">- Nom Team: +50 pour "Nettoient la salle cousteau"</div>
-                    <div className="mb-2">- Nom Team: +1200 pour "Premier Rush 1"</div>
-                    <div className="mb-2">- Nom Team: +50 pour "Nettoient la salle cousteau"</div>
-                    <div className="mb-2">- Nom Team: +1200 pour "Premier Rush 1"</div>
-                    <div className="mb-2">- Nom Team: +50 pour "Nettoient la salle cousteau"</div>
-                    <div className="mb-2">- Nom Team: +1200 pour "Premier Rush 1"</div>
+                    {currentEvents.map(event => (
+                      <div key={event.id} className="mb-2">
+                        - {event.team?.name ?? '?'}: {event.score < 0 ? event.score : `+${event.score}`} pour "{event.reason}"
+                      </div>
+                    ))}
                   </div>
                 </div>
                 <div className={styles.tvScreenOverlay}>AV-1</div>
@@ -154,4 +161,20 @@ export default function Home() {
       </main>
     </div>
   )
+}
+
+export async function getStaticProps() {
+  const apiBase = process.env.API_URL;
+
+  const { data: teams } = await axios.get(`${apiBase}/teams`);
+  const { data: events } = await axios.get(`${apiBase}/events`);
+
+  return {
+    props: {
+      apiBase,
+      teams,
+      events,
+    },
+    revalidate: 1800,
+  };
 }

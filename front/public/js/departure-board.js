@@ -30,7 +30,7 @@ var DepartureBoard = function (element, options) {
 };
 
 
-DepartureBoard.LETTERS = " 0123456789";
+DepartureBoard.LETTERS = " 0123456789-";
 
 
 DepartureBoard.prototype.spin = function () {

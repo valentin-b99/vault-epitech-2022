@@ -4,7 +4,8 @@
   "info": {
     "singularName": "event",
     "pluralName": "events",
-    "displayName": "Event"
+    "displayName": "Event",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -23,7 +24,8 @@
     },
     "reason": {
       "type": "string",
-      "required": true
+      "required": true,
+      "regex": "^[A-Za-z\\d\\-_\\s!:,.?\\[\\]\\{\\}\\|+#]+$"
     }
   }
 }

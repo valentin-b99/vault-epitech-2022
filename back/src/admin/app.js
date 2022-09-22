@@ -14,10 +14,10 @@ export default {
     },
     translations: {
       en: {
-        'HomePage.helmet.title': 'Epitech CPool Events Dashboard',
-        'app.components.LeftMenu.navbrand.title': 'Epitech CPool',
+        'HomePage.helmet.title': 'Vault-Epitech Dashboard',
+        'app.components.LeftMenu.navbrand.title': 'Vault-Epitech',
         'app.components.LeftMenu.navbrand.workplace': 'Events Dashboard',
-        'Auth.form.welcome.title': 'Epitech CPool Events Dashboard',
+        'Auth.form.welcome.title': 'Vault-Epitech Events Dashboard',
         'Auth.form.welcome.subtitle': 'Log in to a beautiful world',
       },
     },
