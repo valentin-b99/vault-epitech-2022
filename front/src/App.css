@@ -1,4 +1,4 @@
-.container {
+.app-container {
   padding: 0 2rem;
 }
 
@@ -12,7 +12,7 @@
   align-items: center;
 }
 
-.tvContainer {
+.tv-container {
   display: flex;
   align-items: center;
 }
@@ -132,7 +132,7 @@
   }
 }
 
-.tvContainer .tvScreen {
+.tv-container .tv-screen {
   background: #121010;
   width: 78%;
   height: 80%;
@@ -143,7 +143,7 @@
   color: #0f0;
   animation: textflicker 0.05s infinite alternate;
 }
-.tvContainer .tvScreenDisplay::after {
+.tv-container .tv-screen-display::after {
   content: " ";
   display: block;
   position: absolute;
@@ -156,7 +156,7 @@
   z-index: 2;
   pointer-events: none;
 }
-.tvContainer .tvScreenDisplay::before {
+.tv-container .tv-screen-display::before {
   content: " ";
   display: block;
   position: absolute;
@@ -170,11 +170,11 @@
   pointer-events: none;
 }
 
-.tvContainer .tvScreen .tvScreenDisplay.turnOn {
+.tv-container .tv-screen .tv-screen-display.turn-on {
   animation: turn-on 4s linear, flicker 0.15s infinite;
 }
 
-.tvContainer .tvScreen .tvScreenDisplay {
+.tv-container .tv-screen .tv-screen-display {
   background-color: #002700;
   width: 100%;
   height: 100%;
@@ -182,7 +182,7 @@
   animation-fill-mode: forwards;
 }
 
-.tvContainer .tvScreen .tvScreenDisplay.turnOn ~ .tvScreenOverlay {
+.tv-container .tv-screen .tv-screen-display.turn-on ~ .tv-screen-overlay {
   color: #60a960;
   position: absolute;
   top: 9%;
@@ -194,7 +194,7 @@
   animation-fill-mode: forwards;
 }
 
-.tvContainer .tvScreenMan {
+.tv-container .tv-screen-man {
   position: absolute;
   top: 0;
   left: 0;
@@ -216,7 +216,7 @@
   }
 }
 
-.tvContainer .tvScreenContent {
+.tv-container .tv-screen-content {
   padding: 6% 9%;
   z-index: 1;
   overflow-x: hidden;
@@ -225,7 +225,7 @@
   position: relative;
 }
 
-.tvContainer .tvBorder {
+.tv-container .tv-border {
   width: 100%;
   background-image: url("../public/images/TV-Border.png");
   background-position: center;
@@ -236,19 +236,20 @@
   z-index: 10;
 }
 
-.teamGauges {
+.team-gauges {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
 }
 
-.teamGauges .teamGauge {
+.team-gauges .team-gauge {
   width: 100%;
   text-align: center;
+  margin-bottom: 15px;
 }
 
-.teamGauges .teamGauge .gauge {
+.team-gauges .team-gauge .gauge {
   width: 100%;
   background-image: url("../public/images/gauge.png");
   background-position: center;
@@ -519,7 +520,7 @@
   }
 }
 
-.teamGauges .teamGauge .gauge .needle:before {
+.team-gauges .team-gauge .gauge .needle:before {
   content: '';
   width: 100%;
   height: 100%;
@@ -531,26 +532,43 @@
   transition: transform 0.5s ease-out;
 }
 
-.teamGauges .teamGauge .gauge .needle.move1:before {
+.team-gauges .team-gauge .gauge .needle.move-1:before {
   animation: needle-move-1 3s infinite;
 }
-.teamGauges .teamGauge .gauge .needle.move2:before {
+.team-gauges .team-gauge .gauge .needle.move-2:before {
   animation: needle-move-2 3.3s infinite;
 }
-.teamGauges .teamGauge .gauge .needle.move3:before {
+.team-gauges .team-gauge .gauge .needle.move-3:before {
   animation: needle-move-3 2.8s infinite;
 }
-.teamGauges .teamGauge .gauge .needle.move4:before {
+.team-gauges .team-gauge .gauge .needle.move-4:before {
   animation: needle-move-4 3s infinite;
 }
 
-.teamGauges .teamGauge .gauge .needle {
+.team-gauges .team-gauge .gauge .needle {
   width: 1px;
   height: 45%;
   position: absolute;
   bottom: 28%;
   left: 50.5%;
-  transform: rotate(0deg);
   transform-origin: 50% calc(100% - 10%);
   transition: transform 0.5s ease-out;
+}
+
+@media screen and (max-width: 991px) {
+  .team-gauges {
+    flex-direction: row;
+  }
+}
+
+@media screen and (max-width: 635px) {
+  .app-container {
+    padding: 0 !important;
+  }
+  .team-gauges {
+    flex-wrap: wrap;
+  }
+  .team-gauge {
+    max-width: 135px;
+  }
 }
