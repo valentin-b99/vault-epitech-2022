@@ -17,16 +17,14 @@ const calculateTopScore = teams => {
   if (max <= 0) {
     return 0;
   }
-  // TODO
-  return max + ((Math.pow(max, -1) + 2) * (avg < 0 ? avg * -1 : avg));
+  // Jsp trop ce que fait ce calcul, mais ca marche dcp pas toucher lol
+  return max + (Math.pow(max, -1) * ((avg < 0 ? avg * -1 : avg) * 5000));
 };
 
 const calculateDegrees = (score, topScore) => {
   const deg = score <= 0 ? 0 : (score * (MAX_DEG * 2) / topScore);
-  // TODO
-  console.error({score, deg, topScore})
 
-  return deg - MAX_DEG + 5;
+  return deg === 0 ? deg - MAX_DEG + 5 : deg - (MAX_DEG + 5);
 };
 
 const App = () => {
