@@ -1,0 +1,131 @@
+version: '3.4'
+services:
+  traefik:
+    image: traefik:v2.3
+    container_name: traefik-vault-epitech
+    restart: always
+    command:
+      - --log.level=DEBUG
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --providers.docker=true
+      - --providers.docker.exposedByDefault=false
+      - --providers.docker.network=traefik
+      - --providers.file.filename=config.toml
+      - --providers.file.watch=true
+      - --api=true
+      - --api.dashboard=true
+      - --api.insecure=true
+      - --accesslog=true
+      - --certificatesresolvers.le.acme.httpchallenge=true
+      - --certificatesresolvers.le.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.le.acme.email=valentin1.bonnet@epitech.eu
+      - --certificatesresolvers.le.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.le.acme.tlschallenge=true
+      - --entrypoints.websecure.http.tls=true
+      - --entrypoints.websecure.http.tls.certresolver=le
+      - --entrypoints.websecure.http.tls.domains[0].main=vault-epitech.vltn.best
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.vault-epitech.vltn.best
+    networks:
+      - traefik
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./traefik/config.toml:/config.toml
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./var/docker/letsencrypt:/letsencrypt
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
+      - "traefik.http.routers.http-catchall.entrypoints=web"
+      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.dev-auth.basicauth.users=team:$$2y$$13$$12JHd46CvwTMBGVgSLaLp.Z10CXZA6ojJYSm7ZCiBmLDzRB/66KCW"
+      - "traefik.http.services.traefik-dashboard.loadbalancer.server.port=888" # required by swarm but not used.
+      - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.vault-epitech.vltn.best`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+      - "traefik.http.routers.traefik-dashboard.entrypoints=websecure"
+      - "traefik.http.routers.traefik-dashboard.tls.certresolver=le"
+      - "traefik.http.routers.traefik-dashboard.tls=true"
+      - "traefik.http.routers.traefik-dashboard.service=api@internal"
+      - "traefik.http.routers.traefik-dashboard.middlewares=dev-auth"
+
+  database:
+    image: mysql:5.7
+    container_name: database-vault-epitech
+    restart: always
+    env_file: ./sql/.env
+    volumes:
+      - vault-epitech-sql:/var/lib/mysql
+    networks:
+      - vault-epitech
+
+  back:
+    build:
+      context: ./back
+      dockerfile: ./docker/Dockerfile
+      args:
+        - NODE_ENV=${NODE_ENV}
+        - PORT=${PORT}
+    container_name: back-vault-epitech
+    restart: always
+    env_file: ./back/.env
+    networks:
+      - traefik
+      - vault-epitech
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.api-dev.rule=Host(`api.vault-epitech.vltn.best`)"
+      - "traefik.http.routers.api-dev.tls.certresolver=le"
+      - "traefik.http.routers.api-dev.entrypoints=websecure"
+      - "traefik.http.routers.api-dev.tls=true"
+      - "traefik.http.services.api-dev.loadbalancer.server.port=80"
+    volumes:
+      - ./back:/srv/app
+      - /srv/app/node_modules
+      - /srv/app/.cache
+      - /srv/app/build
+      - vault-epitech-back-uploads:/srv/app/public/uploads
+    depends_on:
+      - traefik
+      - database
+
+  front:
+    build:
+      context: ./front
+      dockerfile: ./docker/Dockerfile
+      args:
+        - NODE_ENV=${NODE_ENV}
+        - PORT=${PORT}
+    container_name: front-vault-epitech
+    restart: always
+    networks:
+      - traefik
+      - vault-epitech
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.panel-dev.rule=Host(`vault-epitech.vltn.best`)"
+      - "traefik.http.routers.panel-dev.tls.certresolver=le"
+      - "traefik.http.routers.panel-dev.entrypoints=websecure"
+      - "traefik.http.routers.panel-dev.tls=true"
+    volumes:
+      - ./front:/src
+      - /src/node_modules
+    env_file: ./front/.env
+    depends_on:
+      - traefik
+      - database
+      - back
+
+networks:
+  vault-epitech:
+  traefik:
+    external: true
+
+volumes:
+  vault-epitech-sql:
+  vault-epitech-back-uploads:
