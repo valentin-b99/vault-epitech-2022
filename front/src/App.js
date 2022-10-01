@@ -24,7 +24,7 @@ const calculateTopScore = teams => {
 const calculateDegrees = (score, topScore) => {
   const deg = score <= 0 ? 0 : (score * (MAX_DEG * 2) / topScore);
 
-  return deg === 0 ? deg - MAX_DEG + 5 : deg - (MAX_DEG + 5);
+  return deg - MAX_DEG;
 };
 
 const App = () => {
