@@ -156,6 +156,10 @@ const App = () => {
                   className="needle move-1"
                   style={{ transform: `rotate(${calculateDegrees(teams?.[0]?.score ?? 0, topScore)}deg)` }}
                 ></div>
+                <div
+                  className="icon"
+                  style={{ backgroundImage: `url(${process.env.REACT_APP_API_URL.replace('/api', '')}${teams?.[0]?.icon.url})` }}
+                ></div>
               </div>
               <div ref={gaugeBoardTeam1Ref}></div>
             </div>
@@ -164,6 +168,10 @@ const App = () => {
                 <div
                   className="needle move-2"
                   style={{ transform: `rotate(${calculateDegrees(teams?.[1]?.score ?? 0, topScore)}deg)` }}
+                ></div>
+                <div
+                  className="icon"
+                  style={{ backgroundImage: `url(${process.env.REACT_APP_API_URL.replace('/api', '')}${teams?.[1]?.icon.url})` }}
                 ></div>
               </div>
               <div ref={gaugeBoardTeam2Ref}></div>
@@ -176,6 +184,10 @@ const App = () => {
                       className="needle move-3"
                       style={{ transform: `rotate(${calculateDegrees(teams?.[2]?.score ?? 0, topScore)}deg)` }}
                     ></div>
+                    <div
+                      className="icon"
+                      style={{ backgroundImage: `url(${process.env.REACT_APP_API_URL.replace('/api', '')}${teams?.[2]?.icon.url})` }}
+                    ></div>
                   </div>
                   <div ref={gaugeBoardTeam3Ref}></div>
                 </div>
@@ -184,6 +196,10 @@ const App = () => {
                     <div
                       className="needle move-4"
                       style={{ transform: `rotate(${calculateDegrees(teams?.[3]?.score ?? 0, topScore)}deg)` }}
+                    ></div>
+                    <div
+                      className="icon"
+                      style={{ backgroundImage: `url(${process.env.REACT_APP_API_URL.replace('/api', '')}${teams?.[3]?.icon.url})` }}
                     ></div>
                   </div>
                   <div ref={gaugeBoardTeam4Ref}></div>
@@ -225,6 +241,10 @@ const App = () => {
                     className="needle move-3"
                     style={{ transform: `rotate(${calculateDegrees(teams?.[2]?.score ?? 0, topScore)}deg)` }}
                   ></div>
+                  <div
+                    className="icon"
+                    style={{ backgroundImage: `url(${process.env.REACT_APP_API_URL.replace('/api', '')}${teams?.[2]?.icon.url})` }}
+                  ></div>
                 </div>
                 <div ref={gaugeBoardTeam3Ref}></div>
               </div>
@@ -233,6 +253,10 @@ const App = () => {
                   <div
                     className="needle move-4"
                     style={{ transform: `rotate(${calculateDegrees(teams?.[3]?.score ?? 0, topScore)}deg)` }}
+                  ></div>
+                  <div
+                    className="icon"
+                    style={{ backgroundImage: `url(${process.env.REACT_APP_API_URL.replace('/api', '')}${teams?.[3]?.icon.url})` }}
                   ></div>
                 </div>
                 <div ref={gaugeBoardTeam4Ref}></div>

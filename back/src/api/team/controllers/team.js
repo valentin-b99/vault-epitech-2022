@@ -13,6 +13,9 @@ module.exports = createCoreController('api::team.team', ({ strapi }) => ({
     const teams = await strapi.query('api::team.team')
       .findMany({
         select: ['id', 'name', 'slug'],
+        populate: {
+          icon: true,
+        },
       });
 
     ctx.body = await Promise.all(teams.map(async team => {
