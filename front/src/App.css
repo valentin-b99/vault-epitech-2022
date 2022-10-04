@@ -585,3 +585,18 @@
     max-width: 135px;
   }
 }
+
+@media screen and (min-width: 2000px) {
+  .tv-container .tv-screen-content {
+    font-size: 2rem;
+  }
+  .tv-container .tv-screen-content u {
+    font-size: 2.9rem !important;
+  }
+  .tv-container .tv-screen-overlay {
+    font-size: 2.5rem !important;
+  }
+  .team-gauges .team-gauge .departure-board {
+    transform: scale(2.5) translateY(40%);
+  }
+}

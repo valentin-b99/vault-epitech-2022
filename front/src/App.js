@@ -41,49 +41,63 @@ const App = () => {
   const [teams, setTeams] = useState([]);
   const [events, setEvents] = useState([]);
   const [topScore, setTopScore] = useState(0);
+  const [screen, setScreen] = useState('events');
 
-  const scrollDown = (isFirst = false) => {
+  const scrollDown = () => {
     let timeoutIdScrollTop;
-    if (!isFirst) {
-      tvScreenDisplayRef.current?.classList.remove('turn-on');
-      timeoutIdScrollTop = setTimeout(() => {
-        tvScreenDisplayRef.current?.classList.add('turn-on');
-        tvScreenContentRef.current?.scrollTo({
-          top: 0,
-          behavior: 'instant'
-        });
-      }, 10000);
-    }
 
     let intervalId;
     const timeoutIdScrollDown = setTimeout(() => {
       intervalId = setInterval(() => {
         if (tvScreenContentRef.current?.scrollTop + tvScreenContentRef.current?.offsetHeight >= tvScreenContentRef.current?.scrollHeight - 5) {
           clearInterval(intervalId);
-          return scrollDown();
+          tvScreenDisplayRef.current?.classList.remove('turn-on');
+          timeoutIdScrollTop = setTimeout(() => {
+            tvScreenDisplayRef.current?.classList.add('turn-on');
+            tvScreenContentRef.current?.scrollTo({
+              top: 0,
+              behavior: 'instant'
+            });
+            setScreen('teams');
+          }, 10000);
+          return { timeoutIdScrollTop, timeoutIdScrollDown, intervalId };
         }
         tvScreenContentRef.current?.scrollTo({
           top: tvScreenContentRef.current?.scrollTop + 5,
           behavior: 'smooth'
         });
       }, 100);
-    }, isFirst ? 10000 : 20000);
+    }, 20000);
 
     return { timeoutIdScrollTop, timeoutIdScrollDown, intervalId };
   };
 
   useEffect(() => {
-    const { timeoutIdScrollTop, timeoutIdScrollDown, intervalId } = scrollDown(true);
-    return () => {
-      if (timeoutIdScrollTop) {
-        clearTimeout(timeoutIdScrollTop);
-      }
-      clearTimeout(timeoutIdScrollDown);
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
-  }, []);
+    if (screen === 'events') {
+      const { timeoutIdScrollTop, timeoutIdScrollDown, intervalId } = scrollDown();
+      return () => {
+        if (timeoutIdScrollTop) {
+          clearTimeout(timeoutIdScrollTop);
+        }
+        clearTimeout(timeoutIdScrollDown);
+        if (intervalId) {
+          clearInterval(intervalId);
+        }
+      };
+    } else if (screen === 'teams') {
+      const removeTurnOnClassTimeoutId = setTimeout(() => {
+        tvScreenDisplayRef.current?.classList.remove('turn-on');
+      }, 1000);
+      const eventsTimeoutId = setTimeout(() => {
+        tvScreenDisplayRef.current?.classList.add('turn-on');
+        setScreen('events');
+      }, 20000);
+      return () => {
+        clearTimeout(removeTurnOnClassTimeoutId);
+        clearTimeout(eventsTimeoutId);
+      };
+    }
+  }, [screen]);
 
   useEffect(() => {
     const teamBoard1 = new DepartureBoard(gaugeBoardTeam1Ref.current, { letterCount: 6 });
@@ -213,19 +227,46 @@ const App = () => {
                 <div ref={tvScreenDisplayRef} className="tv-screen-display turn-on">
                   <div className="tv-screen-man"></div>
                   <div ref={tvScreenContentRef} className="tv-screen-content">
-                    <div className="mb-3">
-                      <u className="fs-4">25 Derniers evenements:</u>
-                    </div>
-                    {!events.length && (
-                      <div className="mb-2">
-                        - 404 Not Found
-                      </div>
+                    {screen === 'events' && (
+                      <>
+                        <div className="mb-3">
+                          <u className="fs-4">25 Derniers evenements</u>
+                        </div>
+                        {!events.length && (
+                          <div className="mb-2">
+                            - 404 Not Found
+                          </div>
+                        )}
+                        {events.map(event => (
+                          <div key={event.id} className="mb-2">
+                            - {event.team?.name ?? '?'}: {event.score < 0 ? event.score : `+${event.score}`} pour &quot;{event.reason}&quot;
+                          </div>
+                        ))}
+                      </>
                     )}
-                    {events.map(event => (
-                      <div key={event.id} className="mb-2">
-                        - {event.team?.name ?? '?'}: {event.score < 0 ? event.score : `+${event.score}`} pour &quot;{event.reason}&quot;
-                      </div>
-                    ))}
+                    {screen === 'teams' && (
+                      <>
+                        <div className="mb-3">
+                          <u className="fs-4">Les equipes</u>
+                        </div>
+                        {!teams.length ? (
+                          <div className="mb-2">
+                            - 404 Not Found
+                          </div>
+                        ) : (
+                          <div className="d-flex align-items-center justify-content-between" style={{ height: '90%' }}>
+                            <div className="d-flex flex-column align-items-center justify-content-around h-100">
+                              <div>{`<- ${teams[0].name}: ${teams[0].score}`}</div>
+                              <div>{`<- ${teams[1].name}: ${teams[1].score}`}</div>
+                            </div>
+                            <div className="d-flex flex-column align-items-center justify-content-around h-100">
+                              <div>{`${teams[2].name}: ${teams[2].score} ->`}</div>
+                              <div>{`${teams[3].name}: ${teams[3].score} ->`}</div>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
                 <div className="tv-screen-overlay">AV-1</div>
