@@ -112,6 +112,7 @@ services:
       - "traefik.http.routers.front-vault-epitech.tls.certresolver=le"
       - "traefik.http.routers.front-vault-epitech.entrypoints=websecure"
       - "traefik.http.routers.front-vault-epitech.tls=true"
+      - "traefik.http.services.front-vault-epitech.loadbalancer.server.port=80"
     volumes:
       - ./front:/src
       - /src/node_modules
