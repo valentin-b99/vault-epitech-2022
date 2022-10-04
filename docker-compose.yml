@@ -78,11 +78,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik"
-      - "traefik.http.routers.api-dev.rule=Host(`api.vault-epitech.vltn.best`)"
-      - "traefik.http.routers.api-dev.tls.certresolver=le"
-      - "traefik.http.routers.api-dev.entrypoints=websecure"
-      - "traefik.http.routers.api-dev.tls=true"
-      - "traefik.http.services.api-dev.loadbalancer.server.port=80"
+      - "traefik.http.routers.back-vault-epitech.rule=Host(`api.vault-epitech.vltn.best`)"
+      - "traefik.http.routers.back-vault-epitech.tls.certresolver=le"
+      - "traefik.http.routers.back-vault-epitech.entrypoints=websecure"
+      - "traefik.http.routers.back-vault-epitech.tls=true"
+      - "traefik.http.services.back-vault-epitech.loadbalancer.server.port=80"
     volumes:
       - ./back:/srv/app
       - /srv/app/node_modules
@@ -108,10 +108,10 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik"
-      - "traefik.http.routers.panel-dev.rule=Host(`vault-epitech.vltn.best`)"
-      - "traefik.http.routers.panel-dev.tls.certresolver=le"
-      - "traefik.http.routers.panel-dev.entrypoints=websecure"
-      - "traefik.http.routers.panel-dev.tls=true"
+      - "traefik.http.routers.front-vault-epitech.rule=Host(`vault-epitech.vltn.best`)"
+      - "traefik.http.routers.front-vault-epitech.tls.certresolver=le"
+      - "traefik.http.routers.front-vault-epitech.entrypoints=websecure"
+      - "traefik.http.routers.front-vault-epitech.tls=true"
     volumes:
       - ./front:/src
       - /src/node_modules
