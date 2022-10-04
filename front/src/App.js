@@ -27,6 +27,17 @@ const calculateDegrees = (score, topScore) => {
   return deg - MAX_DEG;
 };
 
+const getTeamPosition = (teams, team) => {
+  const orderedScoreTeams = [...teams].sort((a, b) => b.score - a.score);
+
+  for (let i = 0; i < 10; i++) {
+    if (orderedScoreTeams[i].id === team.id) {
+      return i === 0 ? '1er' : `${i + 1}eme`;
+    }
+  }
+  return '?';
+};
+
 const App = () => {
   const { width } = useWindowSize();
 
@@ -255,13 +266,29 @@ const App = () => {
                           </div>
                         ) : (
                           <div className="d-flex align-items-center justify-content-between" style={{ height: '90%' }}>
-                            <div className="d-flex flex-column align-items-center justify-content-around h-100">
-                              <div>{`<- ${teams[0].name}: ${teams[0].score}`}</div>
-                              <div>{`<- ${teams[1].name}: ${teams[1].score}`}</div>
+                            <div className="d-flex flex-column justify-content-around h-100">
+                              <div>
+                                {`<- ${teams[0].name}: ${teams[0].score}`}
+                                <br />
+                                {`(${getTeamPosition(teams, teams[0])})`}
+                              </div>
+                              <div>
+                                {`<- ${teams[1].name}: ${teams[1].score}`}
+                                <br />
+                                {`(${getTeamPosition(teams, teams[1])})`}
+                              </div>
                             </div>
-                            <div className="d-flex flex-column align-items-center justify-content-around h-100">
-                              <div>{`${teams[2].name}: ${teams[2].score} ->`}</div>
-                              <div>{`${teams[3].name}: ${teams[3].score} ->`}</div>
+                            <div className="d-flex flex-column justify-content-around h-100" style={{ textAlign: 'right' }}>
+                              <div>
+                                {`${teams[2].name}: ${teams[2].score} ->`}
+                                <br />
+                                {`(${getTeamPosition(teams, teams[2])})`}
+                              </div>
+                              <div>
+                                {`${teams[3].name}: ${teams[3].score} ->`}
+                                <br />
+                                {`(${getTeamPosition(teams, teams[3])})`}
+                              </div>
                             </div>
                           </div>
                         )}
