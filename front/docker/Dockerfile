@@ -10,7 +10,7 @@ WORKDIR /src
 COPY package*.json ./
 RUN npm install
 
-RUN chown -R node.node /src/node_modules
+RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
 
 COPY ./ ./
 
