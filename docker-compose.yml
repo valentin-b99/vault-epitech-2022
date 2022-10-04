@@ -90,7 +90,7 @@ services:
       - /srv/app/build
       - vault-epitech-back-uploads:/srv/app/public/uploads
     depends_on:
-      - traefik
+#      - traefik
       - database
 
   front:
@@ -117,7 +117,7 @@ services:
       - /src/node_modules
     env_file: ./front/.env
     depends_on:
-      - traefik
+#      - traefik
       - database
       - back
 
