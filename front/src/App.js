@@ -183,7 +183,7 @@ const App = () => {
                 ></div>
                 <div
                   className="icon"
-                  style={{ backgroundImage: `url(${process.env.REACT_APP_API_URL.replace('/api', '')}${teams?.[0]?.icon.url})` }}
+                  style={{ backgroundImage: `url(${process.env.REACT_APP_API_UPLOADS_URL}${teams?.[0]?.icon.url})` }}
                 ></div>
               </div>
               <div ref={gaugeBoardTeam1Ref}></div>
@@ -196,7 +196,7 @@ const App = () => {
                 ></div>
                 <div
                   className="icon"
-                  style={{ backgroundImage: `url(${process.env.REACT_APP_API_URL.replace('/api', '')}${teams?.[1]?.icon.url})` }}
+                  style={{ backgroundImage: `url(${process.env.REACT_APP_API_UPLOADS_URL}${teams?.[1]?.icon.url})` }}
                 ></div>
               </div>
               <div ref={gaugeBoardTeam2Ref}></div>
@@ -211,7 +211,7 @@ const App = () => {
                     ></div>
                     <div
                       className="icon"
-                      style={{ backgroundImage: `url(${process.env.REACT_APP_API_URL.replace('/api', '')}${teams?.[2]?.icon.url})` }}
+                      style={{ backgroundImage: `url(${process.env.REACT_APP_API_UPLOADS_URL}${teams?.[2]?.icon.url})` }}
                     ></div>
                   </div>
                   <div ref={gaugeBoardTeam3Ref}></div>
@@ -224,7 +224,7 @@ const App = () => {
                     ></div>
                     <div
                       className="icon"
-                      style={{ backgroundImage: `url(${process.env.REACT_APP_API_URL.replace('/api', '')}${teams?.[3]?.icon.url})` }}
+                      style={{ backgroundImage: `url(${process.env.REACT_APP_API_UPLOADS_URL}${teams?.[3]?.icon.url})` }}
                     ></div>
                   </div>
                   <div ref={gaugeBoardTeam4Ref}></div>
@@ -311,7 +311,7 @@ const App = () => {
                   ></div>
                   <div
                     className="icon"
-                    style={{ backgroundImage: `url(${process.env.REACT_APP_API_URL.replace('/api', '')}${teams?.[2]?.icon.url})` }}
+                    style={{ backgroundImage: `url(${process.env.REACT_APP_API_UPLOADS_URL}${teams?.[2]?.icon.url})` }}
                   ></div>
                 </div>
                 <div ref={gaugeBoardTeam3Ref}></div>
@@ -324,7 +324,7 @@ const App = () => {
                   ></div>
                   <div
                     className="icon"
-                    style={{ backgroundImage: `url(${process.env.REACT_APP_API_URL.replace('/api', '')}${teams?.[3]?.icon.url})` }}
+                    style={{ backgroundImage: `url(${process.env.REACT_APP_API_UPLOADS_URL}${teams?.[3]?.icon.url})` }}
                   ></div>
                 </div>
                 <div ref={gaugeBoardTeam4Ref}></div>
