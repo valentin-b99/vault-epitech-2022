@@ -133,7 +133,13 @@ const App = () => {
   useEffect(() => {
     getData();
     const intervalId = setInterval(getData, 30000);
-    return () => clearInterval(intervalId);
+    const timeoutId = setTimeout(() => {
+      window.location.reload(false);
+    }, 3600000);
+    return () => {
+      clearInterval(intervalId);
+      clearTimeout(timeoutId)
+    };
   }, []);
 
   useEffect(() => {
